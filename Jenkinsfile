@@ -9,21 +9,21 @@ pipeline {
         }
         stage('Build and Test'){
             steps {
-                sh 'docker build . -t trainwithshubham/node-todo-app-cicd:latest' 
+                sh 'sudo docker build . -t trainwithshubham/node-todo-app-cicd:latest' 
             }
         }
         stage('Login and Push Image'){
             steps {
                 echo 'logging in to docker hub and pushing image..'
                 withCredentials([usernamePassword(credentialsId:'dockerHub',passwordVariable:'dockerHubPassword', usernameVariable:'dockerHubUser')]) {
-                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    sh "docker push trainwithshubham/node-todo-app-cicd:latest"
+                    sh "sudo docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                    sh "sudo docker push trainwithshubham/node-todo-app-cicd:latest"
                 }
             }
         }
         stage('Deploy'){
             steps {
-                sh 'docker-compose down && docker-compose up -d'
+                sh 'sudo docker compose up -d'
             }
         }
     }
